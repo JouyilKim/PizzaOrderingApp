@@ -2,6 +2,7 @@ package com.example.pizzaorderingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -11,8 +12,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
-public class OrderMenu extends AppCompatActivity {
+public class OrderMenu extends FragmentActivity {
 
     Button btnOderPizza;
     Button btnOrderSides;
@@ -27,49 +29,18 @@ public class OrderMenu extends AppCompatActivity {
         btnOrderSides = findViewById(R.id.btnSideMenu);
         btnOrderDrinks = findViewById(R.id.btnDrinksMenu);
 
-        //initial fragment
+        //initial fragment (pizza)
         fragment = new PizzaFragment();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.FoodFragment, fragment);
         ft.commit();
-        /*
-        /listeners to pass food type to the next activity: ShowFoods
-         */
-        /*
-        btnOderPizza.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goOrderPizza = new Intent(OrderMenu.this,ShowFoods.class);
-                goOrderPizza.putExtra("foodType", "pizza");
-                startActivity(goOrderPizza);
-            }
-        });
-
-        btnOrderSides.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goOrderSides = new Intent(OrderMenu.this, ShowFoods.class);
-                goOrderSides.putExtra("foodType", "sides");
-                startActivity(goOrderSides);
-            }
-        });
-
-        btnOrderDrinks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goOrderDrinks = new Intent(OrderMenu.this, ShowFoods.class);
-                goOrderDrinks.putExtra("foodType", "drinks");
-                startActivity(goOrderDrinks);
-            }
-        });
-
-         */
     }
 
+    //switch fragment between pizza, sides, and drinks
     public void FragmentSelect(View v){
-        FrameLayout fl = (FrameLayout) findViewById(R.id.FoodFragment);
-        fl.removeAllViews();
+        LinearLayout linearLayoutl = (LinearLayout) findViewById(R.id.FoodFragment);
+        linearLayoutl.removeAllViews();
 
         if(v ==findViewById(R.id.btnPizzaMenu)){
             fragment = new PizzaFragment();

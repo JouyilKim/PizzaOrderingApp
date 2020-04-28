@@ -1,5 +1,5 @@
 package com.example.pizzaorderingapp;
 
 public class UrlSettings {
-    public static String searchPizza = "http://10.0.2.2/PizzaOrderingApp/SearchProducts.php?productType=pizza";
+    public static String searchProducts = "http://10.0.2.2/PizzaOrderingApp/SearchProducts.php";
 }

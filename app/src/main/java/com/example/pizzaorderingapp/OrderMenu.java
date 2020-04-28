@@ -29,12 +29,6 @@ public class OrderMenu extends FragmentActivity {
         btnOrderSides = findViewById(R.id.btnSideMenu);
         btnOrderDrinks = findViewById(R.id.btnDrinksMenu);
 
-        //initial fragment (pizza)
-        fragment = new PizzaFragment();
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(R.id.FoodFragment, fragment);
-        ft.commit();
     }
 
     //switch fragment between pizza, sides, and drinks

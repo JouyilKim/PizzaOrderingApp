@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
             Boolean temp = background.execute(type,name,pwd).get();
             if (temp) {
                 Intent goMain = new Intent(LoginActivity.this, MainActivity.class);
-                goMain.putExtra("username", temp);
+                goMain.putExtra("username", name);
                 startActivity(goMain);
             } else {
                 Toast.makeText(LoginActivity.this, "Input wrong! try again!", Toast.LENGTH_SHORT).show();

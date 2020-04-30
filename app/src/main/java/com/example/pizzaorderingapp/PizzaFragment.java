@@ -30,8 +30,6 @@ import java.net.URLConnection;
 import java.util.HashSet;
 import java.util.Set;
 
-//todo radio button listen, *********add topping and dough**********
-
 public class PizzaFragment extends Fragment {
 
     private LinearLayout upperLayout;

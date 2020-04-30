@@ -41,7 +41,7 @@ public class Register extends AppCompatActivity {
         });
     }
 
-    public void Register (View v) throws ExecutionException, InterruptedException {
+    public void buttonRegister (View v) throws ExecutionException, InterruptedException {
         if (editName.getText().length() < 1) {
             Toast.makeText(Register.this, "Please type your username!", Toast.LENGTH_SHORT).show();
             return;

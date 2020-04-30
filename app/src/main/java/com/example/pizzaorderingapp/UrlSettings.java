@@ -15,6 +15,7 @@ public class UrlSettings {
 
     public static String userSelect = "http://10.0.2.2/PizzaOrderingApp/Login.php";
     public static String userRegister = "http://10.0.2.2/PizzaOrderingApp/Register.php";
-    public static String userRegister2 = "http://10.0.2.2/PizzaOrderingApp/Register2.php";
+
+    public static String orderUrl = "http://10.0.2.2/PizzaOrderingApp/AddOrder.php";
 
 }

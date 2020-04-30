@@ -17,14 +17,14 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 public class LoginBackground extends AsyncTask <String, Void, Boolean>{
-    Context context;
+    Context cxt;
     public LoginBackground(Context context){
-        this.context = context;
+        cxt = context;
     }
 
     @Override
     protected Boolean doInBackground(String...params) {
-        Boolean temp = false;
+        boolean temp = false;
         String type = params[0];
         String loginUrlAddress = UrlSettings.userSelect;
         String registerUrlAddress = UrlSettings.userRegister;
@@ -68,6 +68,7 @@ public class LoginBackground extends AsyncTask <String, Void, Boolean>{
 
                 Log.d("Fetch data", "the result: " + result);
                 if (result.equals("login success")) {
+                    Log.d("success", "login success");
                     temp = true;
                 }
                 return temp;
@@ -76,8 +77,7 @@ public class LoginBackground extends AsyncTask <String, Void, Boolean>{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else if (type.equals("register")){
+        } else if (type.equals("register")){
             try {
                 String name = params[1];
                 String pwd = params[2];
@@ -123,6 +123,7 @@ public class LoginBackground extends AsyncTask <String, Void, Boolean>{
 
                 Log.d("Fetch data", "the result: " + result);
                 if (result.equals("success")) {
+                    Log.d("success", "register success");
                     temp = true;
                 }
 
@@ -133,5 +134,11 @@ public class LoginBackground extends AsyncTask <String, Void, Boolean>{
             }
         }
         return temp;
+    }
+
+    @Override
+    protected void onPostExecute(Boolean aBoolean) {
+        super.onPostExecute(aBoolean);
+
     }
 }

@@ -23,7 +23,7 @@ public class OrderMenu extends FragmentActivity {
     Button btnOrderSides;
     Button btnOrderDrinks;
     Fragment fragment;
-    //public List<String> newItems = new ArrayList<>();
+    String userName;
     public ArrayList<String> newItems = new ArrayList<>();
 
     @Override
@@ -36,6 +36,9 @@ public class OrderMenu extends FragmentActivity {
         btnOrderSides = findViewById(R.id.btnSideMenu);
         btnOrderDrinks = findViewById(R.id.btnDrinksMenu);
 
+        Bundle bundle = this.getIntent().getExtras();
+        userName = bundle.getString("name");
+
         btnCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -43,8 +46,8 @@ public class OrderMenu extends FragmentActivity {
                     Toast.makeText(OrderMenu.this, "the Cart is Empty! Add something!", Toast.LENGTH_SHORT).show();
                 }else{
                     Intent goCart = new Intent(OrderMenu.this, CartActivity.class);
-                   // goCart.putExtra("items", newItems);
                     goCart.putStringArrayListExtra("items", newItems);
+                    goCart.putExtra("name", userName);
                     startActivity(goCart);
                 }
             }

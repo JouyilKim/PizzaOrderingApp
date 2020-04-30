@@ -8,12 +8,14 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    TextView txtTitle;
     Button btnGoOrder;
-    Button btnGoSettings;
+    String userName;
 
 
     @Override
@@ -22,7 +24,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnGoOrder = findViewById(R.id.btnGoOrder);
-        btnGoSettings = findViewById(R.id.btnGoSettings);
+        txtTitle = findViewById(R.id.txtTile);
+
+        Bundle  bundle = this.getIntent().getExtras();
+        userName = bundle.getString("username");
+
+        txtTitle.setText("Hello  "+ userName);
 
         //click listener to go ordering activity
         btnGoOrder.setOnClickListener(new View.OnClickListener() {
@@ -30,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(isOnline()) {
                     Intent goOrder = new Intent(MainActivity.this, OrderMenu.class);
+                    goOrder.putExtra("name", userName);
                     startActivity(goOrder);
                 }
                 else{
@@ -38,22 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        //click listener to go user setting activity
-        btnGoSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isOnline()) {
-                    Intent goSettings = new Intent(MainActivity.this, OrderMenu.class);
-                    startActivity(goSettings);
-                }
-                else{
-                    Toast.makeText(MainActivity.this,
-                            "You are not Connected to the Internet", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
     }
 
     private boolean isOnline(){

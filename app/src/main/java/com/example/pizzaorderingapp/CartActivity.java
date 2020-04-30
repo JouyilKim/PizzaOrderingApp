@@ -24,7 +24,8 @@ public class CartActivity extends AppCompatActivity {
     LinearLayout layoutScroll;
     Button btnNxt;
 
-    public ArrayList<String> items;
+    String userName;
+    ArrayList<String> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class CartActivity extends AppCompatActivity {
         Bundle bundle =this.getIntent().getExtras();
 
         items = (ArrayList<String>)(bundle.getStringArrayList("items")).clone();
+        userName = bundle.getString("name");
 
         /*
         /background thread to make view on the items
@@ -49,7 +51,8 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(CartActivity.this, Checkout.class);
-                intent.putExtra("passData", items);
+                intent.putExtra("passData", items); //pass the itemlist to the next activity
+                intent.putExtra("name", userName);
                 startActivity(intent);
             }
         });

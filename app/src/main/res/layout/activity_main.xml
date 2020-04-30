@@ -21,6 +21,8 @@
         android:layout_width="150dp"
         android:layout_height="80dp"
         android:layout_marginTop="56dp"
+        android:background="@android:drawable/toast_frame"
+        android:backgroundTint="#F44336"
         android:text="Order Foods"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,9 +33,11 @@
 
     <TextView
         android:id="@+id/txtTile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="131dp"
+        android:layout_height="38dp"
         android:layout_marginTop="76dp"
+        android:background="#00BCD4"
+        android:gravity="center"
         android:text="Hello user"
         android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"

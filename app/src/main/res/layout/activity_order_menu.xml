@@ -11,6 +11,7 @@
         android:id="@+id/btnCart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:drawable/progress_horizontal"
         android:text="Go to Cart" />
 
     <LinearLayout
@@ -23,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:layout_weight="1"
+            android:backgroundTint="#76F44336"
             android:onClick="FragmentSelect"
             android:text="Pizza" />
 
@@ -31,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:layout_weight="1"
+            android:backgroundTint="#8AFFEB3B"
             android:onClick="FragmentSelect"
             android:text="Sides " />
 
@@ -39,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:layout_weight="1"
+            android:backgroundTint="#7200BCD4"
             android:onClick="FragmentSelect"
             android:text="Drinks" />
     </LinearLayout>

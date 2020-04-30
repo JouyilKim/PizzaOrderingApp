@@ -42,6 +42,7 @@ public class Checkout extends AppCompatActivity {
                 saveOrderClass.execute(type, userName, passItems);
                 Toast.makeText(Checkout.this, "Order Complete!!!",Toast.LENGTH_SHORT).show();
                 Intent goMain = new Intent(Checkout.this, MainActivity.class);
+                goMain.putExtra("username",userName);
                 startActivity(goMain);
             }
         });
@@ -57,6 +58,7 @@ public class Checkout extends AppCompatActivity {
         saveOrderClass.execute(type, userName, passItems);
         Toast.makeText(Checkout.this, "Order Complete!!!",Toast.LENGTH_SHORT).show();
         Intent goMain = new Intent(Checkout.this, MainActivity.class);
+        goMain.putExtra("username",userName);
         startActivity(goMain);
     }
 }

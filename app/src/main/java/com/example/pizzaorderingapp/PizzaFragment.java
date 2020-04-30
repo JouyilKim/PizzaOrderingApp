@@ -1,49 +1,46 @@
 package com.example.pizzaorderingapp;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.net.URLConnection;
-import java.net.URLEncoder;
+import java.util.HashSet;
+import java.util.Set;
 
+//todo radio button listen, *********add topping and dough**********
 
 public class PizzaFragment extends Fragment {
 
-    LinearLayout mainLayout;
-    RadioGroup radioGroup;
-    String[] pizzaNames= {"pizzaComb.jpg", "pizzaVege.png", "pizzaMeat.png"};
-    Bitmap [] pizzaImg= new Bitmap[pizzaNames.length];
+    private LinearLayout upperLayout;
+    private LinearLayout mainLayout;
+    private RadioGroup radioGroup;
+    private String[] pizzaNames= {"pizzaComb.jpg", "pizzaVege.png", "pizzaMeat.png"};
+    private int buttonChecked=0;
+    private String [][] itemList = new String[pizzaNames.length][2];
+
     public PizzaFragment() {
         // Required empty public constructor
     }
@@ -53,7 +50,7 @@ public class PizzaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_pizza, container, false);
+        View v = inflater.inflate(R.layout.fragment_menu, container, false);
         // Inflate the layout for this fragment
 
         //create new RadioGroup in for the menu
@@ -64,9 +61,10 @@ public class PizzaFragment extends Fragment {
         LoadProducts loadProducts = new LoadProducts();
         loadProducts.execute(UrlSettings.searchProducts + "?productType=pizza");
 
-        mainLayout = (LinearLayout) v.findViewById(R.id.layoutPizza);
-        return v;
+        mainLayout = (LinearLayout) v.findViewById(R.id.innerLayout);
+        upperLayout = (LinearLayout)v.findViewById(R.id.pizzaMainLayout);
 
+        return v;
     }
 
 /*
@@ -94,6 +92,7 @@ public class PizzaFragment extends Fragment {
                 Log.d("Fetch data", "the result: "+stringBuilder.toString());
             } catch (Exception e) {
                 e.printStackTrace();
+                Toast.makeText(getActivity(), "server error, try later", Toast.LENGTH_SHORT).show();
             }
             return stringBuilder.toString();
         }
@@ -112,15 +111,47 @@ public class PizzaFragment extends Fragment {
 
                     //***************get product information****************
                     String productName = jsonObject.getString("name");
-                    String productPrice = "$"+ jsonObject.getString("price");
+                    String productPrice = jsonObject.getString("price");
+                    itemList[i][0] = productName;
+                    itemList[i][1] = productPrice;
 
                     //go set the UI in another method
                     setLayout(productName, productPrice, pizzaNames[i]);
                 }
+                //this is for the add button
+                Button btnAdd = new Button(getActivity());
+                btnAdd.setText("Add to Cart");
+                upperLayout.addView(btnAdd);
 
                 //after adding all products in the radiogroup, add it to the linearlayout
                 mainLayout.removeAllViews();
                 mainLayout.addView(radioGroup);
+
+                //check which radiobutton selected
+                radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        RadioButton checkedRB = (RadioButton)group.findViewById(checkedId);
+                        boolean isChecked = checkedRB.isChecked();
+                        if(isChecked) {
+                            buttonChecked = checkedId;
+                        }
+                        //Toast.makeText(getActivity(),"selected",Toast.LENGTH_SHORT).show();
+                    }
+                });
+                btnAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(!(buttonChecked==0)){
+                            addToCart(buttonChecked);
+                            Toast.makeText(getActivity(),"Added to the cart!",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            Toast.makeText(getActivity(),"please select one item!",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
             }
             catch(Exception e){
                 e.printStackTrace();
@@ -132,6 +163,7 @@ public class PizzaFragment extends Fragment {
     //set the product information on the xml file
     private void setLayout(String name, String price, String imgName){
 
+        radioGroup.clearCheck();
 
         //make new textviews
         RadioButton rbProduct = new RadioButton(getActivity());
@@ -150,7 +182,7 @@ public class PizzaFragment extends Fragment {
         //product price
         lp.gravity = Gravity.CENTER;
         txtPrice.setLayoutParams(lp);
-        txtPrice.setText("  Price: " +price);
+        txtPrice.setText("  Price: $" +price);
         txtPrice.setTextSize(20);
 
         //add images
@@ -160,7 +192,7 @@ public class PizzaFragment extends Fragment {
          */
         ImageView pizzaImg = new ImageView(getActivity());
         Picasso.get()
-                .load(UrlSettings.pizzaImgs+imgName)
+                .load(UrlSettings.imageFolder+imgName)
                 .error(R.drawable.progress)
                 .placeholder(R.drawable.progress_animation)
                 .resize(800,800)
@@ -170,6 +202,19 @@ public class PizzaFragment extends Fragment {
         radioGroup.addView(rbProduct);
         radioGroup.addView(txtPrice);
         radioGroup.addView(pizzaImg);
+
+    }
+
+    private void addToCart(int buttonChecked){
+
+        //*******important***********
+        //because the radiobutton id keep stacking at every fragment refresh, this is a temp way to avoid
+        buttonChecked = buttonChecked%3;
+
+        //prepare a string to get pass to the cart
+        ((OrderMenu)getActivity()).newItems.add(itemList[buttonChecked-1][0]);
+        ((OrderMenu)getActivity()).newItems.add(itemList[buttonChecked-1][1]);
+
 
     }
 }
